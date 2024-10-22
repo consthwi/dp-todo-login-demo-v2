@@ -9,7 +9,7 @@ import {
 import React, { useState } from "react";
 import TodoContainer from "../components/common/TodoContainer";
 import api from "../utils/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginContainer = styled("div")(() => ({
   padding: "2rem",
@@ -24,15 +24,6 @@ const LoginContainer = styled("div")(() => ({
 const LoginTitle = styled("h1")(() => ({
   marginTop: "0",
   textAlign: "center",
-}));
-
-const LoginButton = styled(Button)(() => ({
-  marginTop: "20px",
-  fontSize: "1rem",
-  width: "100%",
-  color: "#fff",
-  backgroundColor: "#e07368",
-  "&:hover": { backgroundColor: "salmon", color: "#fff" },
 }));
 
 const LoginInput = styled(Input)(() => ({
@@ -57,11 +48,62 @@ const LoginLabel = styled(InputLabel)(() => ({
   },
 }));
 
+const LoginButton = styled(Button)(() => ({
+  fontSize: "1rem",
+  width: "130px",
+  color: "#fff",
+  backgroundColor: "#e07368",
+  "&:hover": { backgroundColor: "salmon", color: "#fff" },
+  "@media(max-width: 510px)": {
+    width: "100%",
+  },
+}));
+
+const LoginRegisterButton = styled(LoginButton)(() => ({
+  width: "130px",
+  "@media(max-width: 510px)": {
+    width: "100%",
+  },
+}));
+
+const LoginButtonWrapper = styled("div")(() => ({
+  display: "flex",
+  flexWrap: "wrap",
+  alignItems: "flex-end",
+  gap: "10px",
+  justifyContent: "space-between",
+  "@media(max-width: 510px)": {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+}));
+
+const LoginJoinWrapper = styled("div")(() => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-end",
+  gap: "10px",
+  fontSize: "1rem",
+  color: "#888",
+  "@media(max-width: 510px)": {
+    width: "100%",
+    alignItems: "center",
+    marginTop: "10px",
+  },
+  "& a": {
+    fontSize: "1rem",
+    color: "#fff",
+    fontWeight: "bold",
+    textDecoration: "none",
+  },
+}));
+
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [joinedUser, setJoinedUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [focusedField, setFocusedField] = useState("");
 
   const navigate = useNavigate();
@@ -74,17 +116,20 @@ const LoginPage = () => {
         password: password,
       });
       if (res.status === 200) {
-        setJoinedUser(res.data.joinedUser);
+        setUser(res.data.user);
         sessionStorage.setItem("token", res.data.token);
         api.defaults.headers["authorization"] = "Bearer " + res.data.token;
+        // handleLogin이 실행되면 (로그인하면)
+        // axios api 기본설정의 header객체 속 authorization키의 값으로
+        // "Bearer " + 요청결과값의 토큰을 넣는다.
         setError("");
         navigate("/");
       } else {
         throw new Error("아이디 또는 비밀번호가 일치하지 않습니다");
       }
       navigate("/");
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      setError(error.message);
     }
   };
 
@@ -143,7 +188,15 @@ const LoginPage = () => {
             </FormHelperText>
           </FormControl>
 
-          <LoginButton type="submit">Join Account</LoginButton>
+          <LoginButtonWrapper>
+            <LoginButton type="submit">Enter</LoginButton>
+            <LoginJoinWrapper>
+              <span>If you don't have an account?</span>
+              <LoginRegisterButton>
+                <Link to="/register">Sign Up!</Link>
+              </LoginRegisterButton>
+            </LoginJoinWrapper>
+          </LoginButtonWrapper>
         </form>
       </LoginContainer>
     </TodoContainer>

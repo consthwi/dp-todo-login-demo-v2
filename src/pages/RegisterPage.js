@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import TodoContainer from "../components/common/TodoContainer";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../utils/api";
 
 const RegisterContainer = styled("div")(() => ({
@@ -24,15 +24,6 @@ const RegisterContainer = styled("div")(() => ({
 const RegisterTitle = styled("h1")(() => ({
   marginTop: "0",
   textAlign: "center",
-}));
-
-const RegisterButton = styled(Button)(() => ({
-  marginTop: "20px",
-  fontSize: "1rem",
-  width: "100%",
-  color: "#fff",
-  backgroundColor: "#e07368",
-  "&:hover": { backgroundColor: "salmon", color: "#fff" },
 }));
 
 const RegisterInput = styled(Input)(() => ({
@@ -54,6 +45,57 @@ const RegisterLabel = styled(InputLabel)(() => ({
   fontSize: "1.3rem",
   "&.Mui-focused": {
     color: "salmon",
+  },
+}));
+
+const RegisterButton = styled(Button)(() => ({
+  fontSize: "1rem",
+  width: "200px",
+  color: "#fff",
+  backgroundColor: "#e07368",
+  "&:hover": { backgroundColor: "salmon", color: "#fff" },
+  "@media(max-width: 510px)": {
+    width: "100%",
+  },
+}));
+
+const RegisterLoginButton = styled(RegisterButton)(() => ({
+  width: "100px",
+  "@media(max-width: 510px)": {
+    width: "100%",
+  },
+}));
+
+const RegisterButtonWrapper = styled("div")(() => ({
+  display: "flex",
+  flexWrap: "wrap",
+  alignItems: "flex-end",
+  gap: "10px",
+  justifyContent: "space-between",
+  "@media(max-width: 510px)": {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+}));
+
+const RegisterJoinWrapper = styled("div")(() => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-end",
+  gap: "10px",
+  fontSize: "1rem",
+  color: "#888",
+  "@media(max-width: 510px)": {
+    width: "100%",
+    alignItems: "center",
+    marginTop: "10px",
+  },
+  "& a": {
+    fontSize: "1rem",
+    color: "#fff",
+    fontWeight: "bold",
+    textDecoration: "none",
   },
 }));
 
@@ -194,7 +236,15 @@ const RegisterPage = () => {
             </FormHelperText>
           </FormControl>
 
-          <RegisterButton type="submit">Join Account</RegisterButton>
+          <RegisterButtonWrapper>
+            <RegisterButton type="submit">Join Account</RegisterButton>
+            <RegisterJoinWrapper>
+              <span>Do you already have an account?</span>
+              <RegisterLoginButton>
+                <Link to="/login">Login!</Link>
+              </RegisterLoginButton>
+            </RegisterJoinWrapper>
+          </RegisterButtonWrapper>
         </form>
       </RegisterContainer>
     </TodoContainer>
